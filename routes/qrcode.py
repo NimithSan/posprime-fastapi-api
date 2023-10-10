@@ -3,16 +3,31 @@ import requests
 import json
 import os
 from routes.jwt_setup import current_user
+from passlib.context import CryptContext
+from database.configdb import user_collection
+
 
 router = APIRouter(tags=["QRCode"])
 
 url = "https://api.qrcode-monkey.com/qr/custom"
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
 # This end point is for verify hash password to let user generate qrcode for login new session
 @router.post("/api/verify-hash")
-def verifyPassword(plain_text:str = Form(...),current_user: dict | None = Depends(current_user)):
-    
-    pass
+async def verifyPassword(plain_text:str = Form(...),current_user: dict | None = Depends(current_user)):
+    if current_user is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    exist_user = user_collection.find_one("email",current_user["email"])
+    if not exist_user:
+        raise HTTPException(status_code=401, detail="user not found.")
+    hashedPassword = exist_user.find_one("password",exist_user["password"])
+    verify = verify_password(plain_password=plain_text,hashed_password=hashedPassword)
+    if verify:
+        return {"message":"verify password success"}
+    raise HTTPException(status_code=500,detail="these password doesn't match.")
 
 
 
