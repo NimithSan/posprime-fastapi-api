@@ -18,4 +18,4 @@ app.include_router(qrcode.router)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host= "192.168.12.161", port=8000)
+    uvicorn.run(app, host= "192.168.140.60", port=8000)
