@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Form, HTTPException,Depends
 import requests
 import json
-import os
-from routes.jwt_setup import current_user
+from auth.jwt_setup import current_user
 from passlib.context import CryptContext
 from database.configdb import user_collection
 

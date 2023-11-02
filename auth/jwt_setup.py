@@ -1,16 +1,14 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Form, HTTPException, Depends
-from pydantic import BaseModel
+from fastapi import Form, HTTPException, Depends
 from database.configdb import user_collection
 from jose import JWTError,jwt
 from fastapi.security import OAuth2PasswordBearer
-from typing import Annotated
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("cce4e4fbe5c541c3ca1bdce76841699801a4da45")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 36500
 

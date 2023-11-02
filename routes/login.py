@@ -1,9 +1,9 @@
 from datetime import timedelta
-from fastapi import APIRouter, Form, HTTPException, Depends
+from fastapi import APIRouter, Form, HTTPException
 import passlib
 from database.configdb import user_collection
 from dotenv import load_dotenv
-from routes.jwt_setup import create_access_token,current_user,ACCESS_TOKEN_EXPIRE_MINUTES
+from auth.jwt_setup import create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES
 from passlib.context import CryptContext
 load_dotenv()
 

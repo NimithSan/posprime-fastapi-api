@@ -1,12 +1,12 @@
 from model.product import Product
 from fastapi import APIRouter, Depends, Form,HTTPException,UploadFile,File
-from database.configdb import product_collection,transaction_collection
-from routes.jwt_setup import current_user
+from database.configdb import product_collection,category_collection
+from auth.jwt_setup import current_user
 import secrets
 import os
 import shutil
-from fastapi import APIRouter, File, Form, UploadFile, WebSocket
-from model.transaction import Transaction
+from fastapi import APIRouter, File, Form, UploadFile
+from model.category import Category
 
 # import datetime
 # current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -14,72 +14,9 @@ from model.transaction import Transaction
 
 router = APIRouter(tags= ["Product"])
 
-# class ConnectionManager:
-#     def __init__(self):
-#         self.active_connections = []
 
-#     async def connect(self, websocket: WebSocket):
-#         await websocket.accept()
-#         self.active_connections.append(websocket)
-
-#     def disconnect(self, websocket: WebSocket):
-#         self.active_connections.remove(websocket)
-
-#     async def send_message(self, data: dict, sender: WebSocket):
-#         for connection in self.active_connections:
-#             message = json.dumps(data)
-#             await connection.send_text(message)
-# #websocket
-# manager = ConnectionManager()
-
-
-# @router.websocket("/ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await manager.connect(websocket)
-#     try:
-#         while True:
-#             # Wait for incoming messages from the WebSocket
-#             data = await websocket.receive_json()
-
-#             # Echo the received message back to all connected clients
-#             await manager.send_message(data, websocket)
-
-#     except Exception as e:
-#         print(f"WebSocket error: {str(e)}")
-
-#     finally:
-#         manager.disconnect(websocket)
-
-# @router.post("/add_transactionitem")
-# async def addToTransaction(
-#     product_barcode: str = Form(...),
-#     current_user: dict | None = Depends(current_user)
-# ):
-#     existing_product = await product_collection.find_one({"product_barcode": product_barcode})
-#     if current_user is None:
-#         raise HTTPException(status_code=401, detail="Not authenticated")
-#     if not existing_product:
-#         raise HTTPException(status_code=400, detail="The product is not register yet.")
-#     if "_id" in existing_product:
-#         existing_product["_id"] = str(existing_product["_id"])
-#     transactionItem = TransactionItem(
-#         product_barcode=existing_product["product_name"],
-#         product_name=existing_product["product_name"],
-#         product_quantity="1",
-#         product_price=existing_product["product_price"],
-#         total_price=existing_product["product_price"],
-#     )
-#     response = {
-#         "type" : "transaction",
-#         "data" : transactionItem
-#     }
-#     await manager.send_message(response, None)
-
-#     return {"message":"product add to transaction successfully"}
-
-
-@router.post("/register_product")
-async def registerProduct(
+@router.post("/create/product")
+async def create_product(
     product_image: UploadFile = File(None),
     product_name:str = Form(...),
     product_barcode:str = Form(...),
@@ -120,6 +57,29 @@ async def registerProduct(
     
     return {"message" : "product register successful"}
 
+@router.get("/fetch/product")
+async def fetch_product():
+    product_list = []
+    async for product in product_collection.find():
+        if "_id" in product:
+            product["_id"] = str(product["_id"])
+        product_list.append(product)
+    return product_list
+
+@router.post("/create/category")
+async def create_category(category:Category):
+    category_collection.insert_one(category.dict())
+    return {'message':"success"}
+
+@router.get("/fetch/category")
+async def fetch_category():
+    cat_list = []
+    async for category in category_collection.find():
+        if "_id" in category:
+            category["_id"] = str(category["_id"])
+        cat_list.append(category)
+
+    return cat_list
 
 # @router.post("/create_transaction")
 # async def create_transaction(transaction: Transaction):

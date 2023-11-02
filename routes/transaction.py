@@ -1,10 +1,10 @@
 from model.transactionitem import TransactionItem
 from model.product import Product
-from fastapi import APIRouter, Depends, Form,HTTPException,UploadFile,File
+from fastapi import APIRouter, Depends, Form,HTTPException
 from database.configdb import product_collection,transaction_collection
-from routes.jwt_setup import current_user
+from auth.jwt_setup import current_user
 import json
-from fastapi import APIRouter, File, Form, UploadFile, WebSocket
+from fastapi import APIRouter, Form, WebSocket
 from typing import List
 from model.transaction import Transaction
 import uuid
@@ -62,8 +62,8 @@ async def create_transaction(transaction: Transaction):
     return {"message": "transaction added"}
 
 
-@router.post("/add_transactionitem")
-async def addToTransaction(
+@router.post("/add-to-cart")
+async def add_to_cart(
     product_barcode: str = Form(...),
     current_user: dict | None = Depends(current_user)
 ):
@@ -89,4 +89,4 @@ async def addToTransaction(
     }
     await manager.send_message(response, None)
 
-    return {"message":"add transaction success"}
+    return transactionItem.dict()
