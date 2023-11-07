@@ -13,3 +13,5 @@ product_collection = mongo_database["product"]
 transaction_collection = mongo_database["transaction"]
 
 category_collection = mongo_database["category"]
+
+supplier_collection = mongo_database["supplier"]

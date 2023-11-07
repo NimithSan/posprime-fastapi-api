@@ -27,7 +27,7 @@ async def login(email: str = Form(...), password: str = Form(...)):
                 data={"sub": email},
                 expires_delta=access_token_expires
             )
-            return {"password": existing_user["password"], "access_token": access_token}
+            return {"access_token": access_token}
         else:
             raise HTTPException(status_code=401, detail="Incorrect password")
     except passlib.exc.UnknownHashError:

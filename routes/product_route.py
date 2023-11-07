@@ -66,32 +66,4 @@ async def fetch_product():
         product_list.append(product)
     return product_list
 
-@router.post("/create/category")
-async def create_category(category:Category):
-    category_collection.insert_one(category.dict())
-    return {'message':"success"}
 
-@router.get("/fetch/category")
-async def fetch_category():
-    cat_list = []
-    async for category in category_collection.find():
-        if "_id" in category:
-            category["_id"] = str(category["_id"])
-        cat_list.append(category)
-
-    return cat_list
-
-# @router.post("/create_transaction")
-# async def create_transaction(transaction: Transaction):
-#     for item in transaction.transactionItemList:
-#             quantity = int(item.product_quantity)
-#             barcode = item.product_barcode
-#             product = await product_collection.find_one({"product_barcode": barcode})
-#             if product and product["stock_quantity"] < quantity:
-#              return {"message": "The product in stock is not enough."}
-#             await product_collection.update_one(
-#                 {"product_barcode": barcode},
-#                 {"$inc": {"stock_quantity": -quantity}}
-#             )
-#     transaction_collection.insert_one(transaction.dict())
-#     return {"message": "transaction added"}

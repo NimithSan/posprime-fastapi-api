@@ -5,10 +5,10 @@ uvicorn
 motor
 python-dotenv
 websocket
-jwt
 Pillow
 uuid
 passlib
 requests
 bcrypt
 python-jose
+PyJwt

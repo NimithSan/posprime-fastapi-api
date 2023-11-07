@@ -62,7 +62,7 @@ async def create_transaction(transaction: Transaction):
     return {"message": "transaction added"}
 
 
-@router.post("/add-to-cart")
+@router.post("/add_to_cart")
 async def add_to_cart(
     product_barcode: str = Form(...),
     current_user: dict | None = Depends(current_user)
