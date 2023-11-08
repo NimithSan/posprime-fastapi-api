@@ -1,3 +1,4 @@
+from typing import Union
 from fastapi import APIRouter, Form, HTTPException,Depends
 import requests
 import json
@@ -16,7 +17,7 @@ def verify_password(plain_password, hashed_password):
 
 # This end point is for verify hash password to let user generate qrcode for login new session
 @router.post("/api/verify-hash")
-async def verifyPassword(plain_text:str = Form(...),current_user: dict | None = Depends(current_user)):
+async def verifyPassword(plain_text:str = Form(...),current_user: Union[dict, None] = Depends(current_user)):
     if current_user is None:
         raise HTTPException(status_code=401, detail="Not authenticated")
     exist_user = user_collection.find_one("email",current_user["email"])
@@ -32,7 +33,7 @@ async def verifyPassword(plain_text:str = Form(...),current_user: dict | None = 
 
 
 @router.post("/api/request_qrcode")
-def requestQRCode(data: str = Form(...),current_user: dict | None = Depends(current_user)):
+def requestQRCode(data: str = Form(...),current_user: Union[dict, None] = Depends(current_user)):
     if current_user is None:
         raise HTTPException(status_code=401, detail="Not authenticated")
     payload = {

@@ -1,3 +1,4 @@
+from typing import Union
 from model.product import Product
 from fastapi import APIRouter, Depends, Form,HTTPException,UploadFile,File
 from database.configdb import product_collection,category_collection
@@ -22,7 +23,7 @@ async def create_product(
     product_barcode:str = Form(...),
     product_price:str = Form(...),
     stock_quantity:str = Form(...),
-    current_user: dict | None = Depends(current_user)
+    current_user: Union[dict, None] = Depends(current_user)
     ):
     existing_product = await product_collection.find_one({"product_barcode": product_barcode})
     if current_user is None:

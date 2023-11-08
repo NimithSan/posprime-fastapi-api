@@ -5,7 +5,7 @@ from database.configdb import product_collection,transaction_collection
 from auth.jwt_setup import current_user
 import json
 from fastapi import APIRouter, Form, WebSocket
-from typing import List
+from typing import List, Union
 from model.transaction import Transaction
 import uuid
 
@@ -65,7 +65,7 @@ async def create_transaction(transaction: Transaction):
 @router.post("/add_to_cart")
 async def add_to_cart(
     product_barcode: str = Form(...),
-    current_user: dict | None = Depends(current_user)
+    current_user: Union[dict, None] = Depends(current_user)
 ):
     existing_product = await product_collection.find_one({"product_barcode": product_barcode})
     if current_user is None:

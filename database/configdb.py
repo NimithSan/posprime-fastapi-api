@@ -1,7 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 
 # client = AsyncIOMotorClient("mongodb+srv://user:justtesterone@cluster1.zjxsvxv.mongodb.net/")
-client = AsyncIOMotorClient("mongodb://localhost:27017")
+client = AsyncIOMotorClient("mongodb+srv://nimith:nimith@pos-prime.wajdik9.mongodb.net/")
 
 
 mongo_database = client["MartMS"]

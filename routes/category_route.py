@@ -1,3 +1,4 @@
+from typing import Union
 from fastapi import APIRouter, Depends
 from model.category import Category
 from database.configdb import category_collection
@@ -7,7 +8,7 @@ from auth.jwt_setup import current_user
 router = APIRouter(tags=["Category"])
 
 @router.post("/create/category")
-async def create_category(category:Category,current_user: dict | None = Depends(current_user)):
+async def create_category(category:Category,current_user: Union[dict, None] = Depends(current_user)):
     current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     new_category = Category(
         name=category.name,
@@ -18,7 +19,7 @@ async def create_category(category:Category,current_user: dict | None = Depends(
     return {'message':"success"}
 
 @router.get("/fetch/category")
-async def fetch_category(current_user: dict | None = Depends(current_user)):
+async def fetch_category(current_user: Union[dict, None] = Depends(current_user)):
     cat_list = []
     async for category in category_collection.find():
         if "_id" in category:

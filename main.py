@@ -30,7 +30,7 @@ html = f"""
     </head>
     <body>
         <div class="bg-gray-200 p-4 rounded-lg shadow-lg">
-            <h1>Hello from FastAPI@</h1>
+            <h1>Welcome to Nimith San API</h1>
         </div>
     </body>
 </html>
@@ -42,7 +42,7 @@ async def root():
 
 
 if __name__ == "__main__":
-  uvicorn.run(app,host="0.0.0.0",port="8000")
+  uvicorn.run(app,host="0.0.0.0",port=8000)
 
 
 
